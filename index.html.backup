@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Удобный дом — Умный дом под контролем</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+      animation: fadeInDown 1s ease;
+    }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo {
+      max-width: 120px;
+      max-height: 120px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+    .logo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, #fff, #f0f0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header p {
+      font-size: 1.4rem;
+      opacity: 0.95;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+    .header .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      font-style: italic;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+    .service-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 1s ease;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+    }
+    .service-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      display: block;
+      animation: bounce 2s infinite;
+    }
+    .service-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #667eea;
+    }
+    .service-desc {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .service-status {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .status-ok {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+    }
+    .status-warn {
+      background: linear-gradient(135deg, #ffc107, #fd7e14);
+      color: white;
+    }
+    .status-error {
+      background: linear-gradient(135deg, #dc3545, #e74c3c);
+      color: white;
+    }
+    .metrics-section {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      margin-bottom: 40px;
+      animation: fadeInUp 1.2s ease;
+    }
+    .metrics-section h2 {
+      color: #667eea;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .metrics-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .metric-card {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 20px;
+      border-radius: 15px;
+      border-left: 4px solid #667eea;
+      transition: all 0.3s ease;
+    }
+    .metric-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .metric-label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+    .metric-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #333;
+    }
+    .metric-value.ok {
+      color: #28a745;
+    }
+    .metric-value.warn {
+      color: #ffc107;
+    }
+    .metric-value.bad {
+      color: #dc3545;
+    }
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 50px;
+      padding: 30px;
+      opacity: 0.9;
+      animation: fadeIn 1.5s ease;
+    }
+    .footer p {
+      margin-bottom: 10px;
+    }
+    .last-updated {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .update-info {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.5rem;
+      }
+      .header p {
+        font-size: 1.2rem;
+      }
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+      .metrics-section {
+        padding: 25px;
+      }
+      .logo {
+        max-width: 100px;
+        max-height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo-container">
+        <img src="/logo.jpg" alt="Удобный дом" class="logo">
+      </div>
+      <h1>Удобный дом</h1>
+      <p>Умный дом под контролем</p>
+      <div class="subtitle">Автоматизация, безопасность и комфорт в одном месте</div>
+    </div>
+
+    <div class="services-grid">
+      <a href="https://ha.udobnidom.ru" class="service-card" target="_blank">
+        <span class="service-icon">🏡</span>
+        <div class="service-title">Home Assistant</div>
+        <div class="service-desc">Центр управления умным домом, автоматизация и мониторинг всех устройств</div>
+        <span id="ha-status" class="service-status status-warn">Загрузка...</span>
+      </a>
+
+      <a href="https://nextcloud.udobnidom.ru" class="service-card" target="_blank">
+        <span class="service-icon">☁️</span>
+        <div class="service-title">Nextcloud</div>
+        <div class="service-desc">Облачное хранилище файлов, календарь, контакты и совместная работа</div>
+        <span id="nextcloud-status" class="service-status status-warn">Загрузка...</span>
+      </a>
+
+      <a href="https://immich.udobnidom.ru" class="service-card" target="_blank">
+        <span class="service-icon">📸</span>
+        <div class="service-title">Immich</div>
+        <div class="service-desc">Галерея фотографий с автоматическим резервным копированием и AI-поиском</div>
+        <span id="immich-status" class="service-status status-warn">Загрузка...</span>
+      </a>
+
+      <a href="https://iknow.udobnidom.ru" class="service-card" target="_blank">
+        <span class="service-icon">📘</span>
+        <div class="service-title">IKnow / Docmost</div>
+        <div class="service-desc">База знаний, документация и совместная работа с заметками</div>
+        <span id="iknow-status" class="service-status status-warn">Загрузка...</span>
+      </a>
+    </div>
+
+    <div class="metrics-section">
+      <h2>📊 Метрики системы</h2>
+      
+      <h3 style="margin: 35px 0 20px 0; color: #667eea; text-align: center; font-size: 1.3rem;">Home Assistant</h3>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Статус</div>
+          <div id="ha-up" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Доступно</div>
+          <div id="ha-available" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Недоступно</div>
+          <div id="ha-unavailable" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Zigbee устройства</div>
+          <div id="ha-zigbee" class="metric-value">--</div>
+        </div>
+      </div>
+
+      <h3 style="margin: 35px 0 20px 0; color: #667eea; text-align: center; font-size: 1.3rem;">Сервер (192.168.2.206)</h3>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">CPU</div>
+          <div id="cpu" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">RAM</div>
+          <div id="ram" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Диск</div>
+          <div id="disk" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Load Average</div>
+          <div id="server-load" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Uptime</div>
+          <div id="server-uptime" class="metric-value">--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="last-updated">Последнее обновление: <span id="updated">--</span></p>
+      <p class="update-info">Метрики обновляются автоматически каждые 30 секунд</p>
+    </div>
+  </div>
+
+  <script>
+    function byId(id) { return document.getElementById(id); }
+
+    function statusText(el, value) {
+      if (value === 1 || value === 1.0) {
+        el.textContent = '✅ Работает';
+        el.className = 'metric-value ok';
+      } else if (value === 0 || value === 0.0) {
+        el.textContent = '❌ Недоступен';
+        el.className = 'metric-value bad';
+      } else {
+        el.textContent = '⚠️ Неизвестно';
+        el.className = 'metric-value warn';
+      }
+    }
+
+    function setPercent(id, value, invert) {
+      const el = byId(id);
+      if (typeof value !== 'number') {
+        el.textContent = '--';
+        el.className = 'metric-value warn';
+        return;
+      }
+      el.textContent = value.toFixed(1) + '%';
+      const bad = invert ? value < 70 : value >= 90;
+      const warn = invert ? value < 90 : value >= 70;
+      el.className = 'metric-value ' + (bad ? 'bad' : warn ? 'warn' : 'ok');
+    }
+
+    function setNumber(id, value, suffix, warnAt) {
+      const el = byId(id);
+      if (typeof value !== 'number') {
+        el.textContent = '--';
+        el.className = 'metric-value warn';
+        return;
+      }
+      el.textContent = value.toFixed(1) + (suffix || '');
+      el.className = 'metric-value ' + (warnAt != null && value >= warnAt ? 'warn' : 'ok');
+    }
+
+    function setInteger(id, value) {
+      const el = byId(id);
+      if (typeof value !== 'number') {
+        el.textContent = '--';
+        el.className = 'metric-value warn';
+        return;
+      }
+      el.textContent = String(Math.round(value));
+      el.className = 'metric-value ' + (value > 0 ? 'warn' : 'ok');
+    }
+
+    function setText(id, text, cls) {
+      const el = byId(id);
+      el.textContent = text;
+      el.className = 'metric-value ' + (cls || 'ok');
+    }
+
+    function formatUptime(hours) {
+      if (typeof hours !== 'number') return '--';
+      if (hours >= 24) return (hours / 24).toFixed(1) + ' дней';
+      return hours.toFixed(1) + ' часов';
+    }
+
+    function formatUpdated(value) {
+      if (!value) return '--';
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return value;
+      return d.toLocaleString('ru-RU', { hour12: false });
+    }
+
+    function updateServiceStatus(id, isUp) {
+      const el = byId(id);
+      if (!el) return;
+      if (isUp === 1 || isUp === true) {
+        el.textContent = '✅ Работает';
+        el.className = 'service-status status-ok';
+      } else if (isUp === 0 || isUp === false) {
+        el.textContent = '❌ Недоступен';
+        el.className = 'service-status status-error';
+      } else {
+        el.textContent = '⚠️ Проверка...';
+        el.className = 'service-status status-warn';
+      }
+    }
+
+    async function checkServiceStatus(url) {
+      try {
+        const response = await fetch(url, { 
+          method: 'HEAD', 
+          mode: 'no-cors',
+          cache: 'no-cache',
+          signal: AbortSignal.timeout(5000)
+        });
+        return true; // Если нет ошибки, считаем что сервис работает
+      } catch (error) {
+        return false;
+      }
+    }
+
+    async function loadMetrics() {
+      // Загружаем метрики с сервера
+      fetch('/status.json', { cache: 'no-store' })
+        .then(r => r.json())
+        .then(data => {
+          updateServiceStatus('ha-status', data.homeassistant_up);
+
+          statusText(byId('ha-up'), data.homeassistant_up);
+          setPercent('ha-available', data.ha_available_percent, true);
+          setInteger('ha-unavailable', data.ha_unavailable_count);
+
+          if (data.ha_zigbee_total > 0) {
+            const zigbeeText = data.ha_zigbee_offline > 0
+              ? data.ha_zigbee_offline + ' из ' + data.ha_zigbee_total + ' offline'
+              : data.ha_zigbee_total + ' online';
+            setText('ha-zigbee', zigbeeText, data.ha_zigbee_offline > 0 ? 'warn' : 'ok');
+          }
+
+          setPercent('cpu', data.cpu_percent, false);
+          setPercent('ram', data.ram_percent, false);
+          setPercent('disk', data.disk_percent, false);
+          setNumber('server-load', data.server_load1, '', 4);
+          setText('server-uptime', formatUptime(data.server_uptime_hours), 'ok');
+
+          const updated = formatUpdated(data.updated_at);
+          byId('updated').textContent = updated;
+        })
+        .catch(() => {
+          ['ha-up','ha-available','ha-unavailable','cpu','ram','disk','server-load','server-uptime'].forEach(id => {
+            const el = byId(id);
+            if (el) {
+              el.textContent = '⚠️ Ошибка';
+              el.className = 'metric-value warn';
+            }
+          });
+          byId('updated').textContent = 'ошибка загрузки';
+        });
+
+      // Проверяем статус сервисов
+      const services = [
+        { id: 'ha-status', url: 'https://ha.udobnidom.ru' },
+        { id: 'nextcloud-status', url: 'https://nextcloud.udobnidom.ru' },
+        { id: 'immich-status', url: 'https://immich.udobnidom.ru' },
+        { id: 'iknow-status', url: 'https://iknow.udobnidom.ru' }
+      ];
+
+      for (const service of services) {
+        const isUp = await checkServiceStatus(service.url);
+        updateServiceStatus(service.id, isUp);
+      }
+    }
+
+    // Загружаем метрики сразу и затем каждые 30 секунд
+    loadMetrics();
+    setInterval(loadMetrics, 30000);
+  </script>
+</body>
+</html>
+

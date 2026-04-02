@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Debug - Удобный дом</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+    .debug-box { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .success { color: green; }
+    .error { color: red; }
+    .info { color: blue; }
+    pre { background: #f0f0f0; padding: 10px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Отладка загрузки метрик</h1>
+  
+  <div id="log"></div>
+
+  <script>
+    const log = document.getElementById('log');
+    
+    function addLog(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = 'debug-box';
+      const time = new Date().toLocaleTimeString();
+      div.innerHTML = `<strong>[${time}]</strong> <span class="${type}">${message}</span>`;
+      log.appendChild(div);
+      console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+
+    async function testFetch() {
+      addLog('🚀 Начинаю тестирование...', 'info');
+      
+      // Тест 1: Определяем протокол
+      const protocol = window.location.protocol;
+      const host = window.location.host;
+      addLog(`📍 Протокол: ${protocol}, Хост: ${host}`, 'info');
+      
+      // Тест 2: Формируем URL
+      const statusUrl = `${protocol}//${host}/status.json`;
+      addLog(`🔗 URL для загрузки: ${statusUrl}`, 'info');
+      
+      // Тест 3: Пробуем загрузить
+      try {
+        addLog('📡 Отправляю запрос fetch...', 'info');
+        const response = await fetch(statusUrl, { cache: 'no-store' });
+        
+        addLog(`📥 Ответ получен: HTTP ${response.status}`, response.ok ? 'success' : 'error');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        // Тест 4: Читаем текст
+        const text = await response.text();
+        addLog(`📝 Получено ${text.length} символов`, 'success');
+        addLog(`<pre>${text.substring(0, 500)}...</pre>`, 'info');
+        
+        // Тест 5: Парсим JSON
+        addLog('🔍 Парсю JSON...', 'info');
+        const data = JSON.parse(text);
+        addLog('✅ JSON успешно распарсен!', 'success');
+        
+        // Тест 6: Проверяем ключевые поля
+        addLog('📊 Проверяю поля:', 'info');
+        const fields = [
+          'homeassistant_up', 'ha_total_count', 'ha_zigbee_total', 
+          'ha_zigbee_offline', 'cpu_percent', 'ram_percent'
+        ];
+        
+        fields.forEach(field => {
+          const value = data[field];
+          const type = typeof value;
+          const status = value !== undefined && value !== null ? 'success' : 'error';
+          addLog(`  ${field}: ${value} (тип: ${type})`, status);
+        });
+        
+        addLog('🎉 Все тесты пройдены успешно!', 'success');
+        
+      } catch (error) {
+        addLog(`❌ Ошибка: ${error.message}`, 'error');
+        addLog(`<pre>${error.stack}</pre>`, 'error');
+      }
+    }
+
+    // Запускаем тест
+    testFetch();
+  </script>
+</body>
+</html>
+

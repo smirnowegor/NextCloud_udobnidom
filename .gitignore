@@ -1,0 +1,5 @@
+status.json
+traffic_history.json
+speedtest_cache.json
+*.log
+.DS_Store

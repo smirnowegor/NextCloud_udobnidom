@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Удобный дом</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 1400px; margin: 0 auto; }
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    .logo {
+      max-width: 120px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+    }
+    .header h1 { font-size: 2.8rem; margin-bottom: 15px; }
+    .header p { font-size: 1.4rem; opacity: 0.95; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+    .service-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .service-icon { font-size: 3.5rem; margin-bottom: 20px; }
+    .service-title { font-size: 1.6rem; font-weight: 600; color: #667eea; margin-bottom: 10px; }
+    .service-desc { color: #666; font-size: 0.95rem; margin-bottom: 15px; }
+    .service-status {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .status-ok { background: linear-gradient(135deg, #28a745, #20c997); color: white; }
+    .status-warn { background: linear-gradient(135deg, #ffc107, #fd7e14); color: white; }
+    .status-error { background: linear-gradient(135deg, #dc3545, #e74c3c); color: white; }
+    .metrics-section {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      margin-bottom: 40px;
+    }
+    .metrics-section h2 { color: #667eea; margin-bottom: 30px; font-size: 2rem; text-align: center; }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .metric-card {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 20px;
+      border-radius: 15px;
+      border-left: 4px solid #667eea;
+    }
+    .metric-label { font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; }
+    .metric-value { font-size: 1.8rem; font-weight: 700; color: #333; }
+    .metric-value.ok { color: #28a745; }
+    .metric-value.warn { color: #ffc107; }
+    .metric-value.bad { color: #dc3545; }
+    .footer { text-align: center; color: white; margin-top: 50px; padding: 30px; }
+    .last-updated { font-size: 1.1rem; font-weight: 600; }
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="/logo.jpg" alt="Удобный дом" class="logo">
+      <h1>Удобный дом</h1>
+      <p>Умный дом под контролем</p>
+    </div>
+
+    <div class="services-grid">
+      <a href="https://ha.udobnidom.ru" class="service-card" target="_blank">
+        <span class="service-icon">🏡</span>
+        <div class="service-title">Home Assistant</div>
+        <div class="service-desc">Центр управления умным домом</div>
+        <span id="ha-status" class="service-status status-warn">Загрузка...</span>
+      </a>
+      <a href="https://nextcloud.udobnidom.ru" class="service-card" target="_blank">
+        <span class="service-icon">☁️</span>
+        <div class="service-title">Nextcloud</div>
+        <div class="service-desc">Облачное хранилище</div>
+        <span id="nextcloud-status" class="service-status status-warn">Загрузка...</span>
+      </a>
+      <a href="https://immich.udobnidom.ru" class="service-card" target="_blank">
+        <span class="service-icon">📸</span>
+        <div class="service-title">Immich</div>
+        <div class="service-desc">Галерея фотографий</div>
+        <span id="immich-status" class="service-status status-warn">Загрузка...</span>
+      </a>
+      <a href="https://iknow.udobnidom.ru" class="service-card" target="_blank">
+        <span class="service-icon">📘</span>
+        <div class="service-title">IKnow</div>
+        <div class="service-desc">База знаний</div>
+        <span id="iknow-status" class="service-status status-warn">Загрузка...</span>
+      </a>
+    </div>
+
+    <div class="metrics-section">
+      <h2>🏠 Home Assistant</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Статус</div>
+          <div id="ha-up" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Доступность сущностей</div>
+          <div id="ha-available" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Всего сущностей</div>
+          <div id="ha-total" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">🌐 Zigbee устройства</div>
+          <div id="ha-zigbee-total" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">❌ Zigbee offline</div>
+          <div id="ha-zigbee-offline" class="metric-value">--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-section">
+      <h2>🖥️ Сервер (orangepirv2 — 192.168.2.206)</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Статус</div>
+          <div id="server-up" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">CPU</div>
+          <div id="cpu" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">RAM</div>
+          <div id="ram" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Диск</div>
+          <div id="disk" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Load</div>
+          <div id="server-load" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Uptime</div>
+          <div id="server-uptime" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">🌡️ CPU Temp</div>
+          <div id="server-cpu-temp" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">🔄 Обновления</div>
+          <div id="server-updates" class="metric-value">--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-section">
+      <h2>🖥️ Proxmox серверы</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 1 (192.168.2.234)</div>
+          <div id="proxmox1-up" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 1 CPU</div>
+          <div id="proxmox1-cpu" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 1 RAM</div>
+          <div id="proxmox1-ram" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 1 🌡️ CPU</div>
+          <div id="proxmox1-cpu-temp" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 1 Uptime</div>
+          <div id="proxmox1-uptime" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 1 🔄</div>
+          <div id="proxmox1-updates" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 2 (192.168.2.110)</div>
+          <div id="proxmox2-up" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 2 CPU</div>
+          <div id="proxmox2-cpu" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 2 RAM</div>
+          <div id="proxmox2-ram" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 2 🌡️ CPU</div>
+          <div id="proxmox2-cpu-temp" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 2 Uptime</div>
+          <div id="proxmox2-uptime" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Proxmox 2 🔄</div>
+          <div id="proxmox2-updates" class="metric-value">--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-section">
+      <h2>🌐 Метрики роутера</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Статус роутера</div>
+          <div id="router-up" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Пинг</div>
+          <div id="router-ping" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Uptime</div>
+          <div id="router-uptime" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Load</div>
+          <div id="router-load" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">RAM роутера</div>
+          <div id="router-ram" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">🌡️ CPU Temp</div>
+          <div id="router-cpu-temp" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">⬇️ Трафик за месяц</div>
+          <div id="wan-rx-month" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">⬆️ Трафик за месяц</div>
+          <div id="wan-tx-month" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">📥 Всего принято</div>
+          <div id="wan-rx-total" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">📤 Всего передано</div>
+          <div id="wan-tx-total" class="metric-value">--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-section">
+      <h2>⚡ Скорость интернета</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">⬇️ Download</div>
+          <div id="speed-download" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">⬆️ Upload</div>
+          <div id="speed-upload" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">📶 Ping</div>
+          <div id="speed-ping" class="metric-value">--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="last-updated">Обновлено: <span id="updated">--</span></p>
+    </div>
+  </div>
+
+  <script>
+    // Простая функция для обновления текста элемента
+    function setText(id, text, className) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = text;
+        if (className) el.className = 'metric-value ' + className;
+      }
+    }
+
+    // Загрузка метрик
+    async function loadMetrics() {
+      try {
+        const response = await fetch('/status.json?' + Date.now(), {
+          cache: 'no-store',
+          headers: { 'Accept': 'application/json' }
+        });
+        
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status);
+        }
+        
+        const data = await response.json();
+        
+        // Обновляем метрики Home Assistant
+        if (data.homeassistant_up === 1 || data.homeassistant_up === 1.0) {
+          setText('ha-up', '✅ Работает', 'ok');
+        } else {
+          setText('ha-up', '❌ Недоступен', 'bad');
+        }
+        
+        // Доступность сущностей
+        setText('ha-available', (data.ha_available_percent || 0).toFixed(1) + '%', 
+                data.ha_available_percent > 90 ? 'ok' : (data.ha_available_percent > 70 ? 'warn' : 'bad'));
+        
+        // Числовые метрики
+        setText('ha-total', Math.round(data.ha_total_count || 0));
+        setText('ha-zigbee-total', Math.round(data.ha_zigbee_total || 0));
+        setText('ha-zigbee-offline', Math.round(data.ha_zigbee_offline || 0), data.ha_zigbee_offline > 0 ? 'warn' : 'ok');
+        
+        // Серверные метрики
+        if (data.server_up === 1 || data.server_up === 1.0) {
+          setText('server-up', '✅ Работает', 'ok');
+        } else {
+          setText('server-up', '❌ Недоступен', 'bad');
+        }
+        setText('cpu', (data.cpu_percent || 0).toFixed(1) + '%');
+        setText('ram', (data.ram_percent || 0).toFixed(1) + '%');
+        setText('disk', (data.disk_percent || 0).toFixed(1) + '%');
+        setText('server-load', (data.server_load1 || 0).toFixed(2));
+        
+        // Форматируем uptime сервера
+        if (data.server_uptime_hours !== null && data.server_uptime_hours !== undefined) {
+          const hours = data.server_uptime_hours;
+          const days = Math.floor(hours / 24);
+          const remainingHours = Math.floor(hours % 24);
+          if (days > 0) {
+            setText('server-uptime', `${days}д ${remainingHours}ч`);
+          } else {
+            setText('server-uptime', `${remainingHours}ч`);
+          }
+        } else {
+          setText('server-uptime', '--');
+        }
+        
+        // Температура CPU сервера
+        if (data.server_cpu_temp !== null && data.server_cpu_temp !== undefined) {
+          const temp = data.server_cpu_temp;
+          let tempClass = 'ok';
+          if (temp > 70) tempClass = 'warn';
+          if (temp > 80) tempClass = 'bad';
+          setText('server-cpu-temp', temp.toFixed(1) + '°C', tempClass);
+        } else {
+          setText('server-cpu-temp', '--');
+        }
+        
+        // Обновления сервера
+        if (data.server_updates !== null && data.server_updates !== undefined) {
+          const updates = data.server_updates;
+          if (updates === 0) {
+            setText('server-updates', '✅ Нет', 'ok');
+          } else {
+            setText('server-updates', `⚠️ ${updates}`, 'warn');
+          }
+        } else {
+          setText('server-updates', '--');
+        }
+        
+        // Метрики Proxmox
+        // Proxmox 1
+        if (data.proxmox1_up === 1 || data.proxmox1_up === 1.0) {
+          setText('proxmox1-up', '✅ Работает', 'ok');
+        } else {
+          setText('proxmox1-up', '❌ Недоступен', 'bad');
+        }
+        setText('proxmox1-cpu', (data.proxmox1_cpu || 0).toFixed(1) + '%');
+        setText('proxmox1-ram', (data.proxmox1_ram || 0).toFixed(1) + '%');
+        
+        // Форматируем uptime Proxmox 1
+        if (data.proxmox1_uptime !== null && data.proxmox1_uptime !== undefined) {
+          const hours = data.proxmox1_uptime;
+          const days = Math.floor(hours / 24);
+          const remainingHours = Math.floor(hours % 24);
+          if (days > 0) {
+            setText('proxmox1-uptime', `${days}д ${remainingHours}ч`);
+          } else {
+            setText('proxmox1-uptime', `${remainingHours}ч`);
+          }
+        } else {
+          setText('proxmox1-uptime', '--');
+        }
+        
+        // Температура CPU Proxmox 1
+        if (data.proxmox1_cpu_temp !== null && data.proxmox1_cpu_temp !== undefined) {
+          const temp = data.proxmox1_cpu_temp;
+          let tempClass = 'ok';
+          if (temp > 70) tempClass = 'warn';
+          if (temp > 80) tempClass = 'bad';
+          setText('proxmox1-cpu-temp', temp.toFixed(1) + '°C', tempClass);
+        } else {
+          setText('proxmox1-cpu-temp', '--');
+        }
+        
+        // Обновления Proxmox 1
+        if (data.proxmox1_updates !== null && data.proxmox1_updates !== undefined) {
+          const updates = data.proxmox1_updates;
+          if (updates === 0) {
+            setText('proxmox1-updates', '✅ Нет', 'ok');
+          } else {
+            setText('proxmox1-updates', `⚠️ ${updates}`, 'warn');
+          }
+        } else {
+          setText('proxmox1-updates', '--');
+        }
+        
+        // Proxmox 2
+        if (data.proxmox2_up === 1 || data.proxmox2_up === 1.0) {
+          setText('proxmox2-up', '✅ Работает', 'ok');
+        } else {
+          setText('proxmox2-up', '❌ Недоступен', 'bad');
+        }
+        setText('proxmox2-cpu', (data.proxmox2_cpu || 0).toFixed(1) + '%');
+        setText('proxmox2-ram', (data.proxmox2_ram || 0).toFixed(1) + '%');
+        
+        // Форматируем uptime Proxmox 2
+        if (data.proxmox2_uptime !== null && data.proxmox2_uptime !== undefined) {
+          const hours = data.proxmox2_uptime;
+          const days = Math.floor(hours / 24);
+          const remainingHours = Math.floor(hours % 24);
+          if (days > 0) {
+            setText('proxmox2-uptime', `${days}д ${remainingHours}ч`);
+          } else {
+            setText('proxmox2-uptime', `${remainingHours}ч`);
+          }
+        } else {
+          setText('proxmox2-uptime', '--');
+        }
+        
+        // Температура CPU Proxmox 2
+        if (data.proxmox2_cpu_temp !== null && data.proxmox2_cpu_temp !== undefined) {
+          const temp = data.proxmox2_cpu_temp;
+          let tempClass = 'ok';
+          if (temp > 70) tempClass = 'warn';
+          if (temp > 80) tempClass = 'bad';
+          setText('proxmox2-cpu-temp', temp.toFixed(1) + '°C', tempClass);
+        } else {
+          setText('proxmox2-cpu-temp', '--');
+        }
+        
+        // Обновления Proxmox 2
+        if (data.proxmox2_updates !== null && data.proxmox2_updates !== undefined) {
+          const updates = data.proxmox2_updates;
+          if (updates === 0) {
+            setText('proxmox2-updates', '✅ Нет', 'ok');
+          } else {
+            setText('proxmox2-updates', `⚠️ ${updates}`, 'warn');
+          }
+        } else {
+          setText('proxmox2-updates', '--');
+        }
+        
+        // Метрики роутера
+        if (data.router_up === 1 || data.router_up === 1.0) {
+          setText('router-up', '✅ Работает', 'ok');
+        } else {
+          setText('router-up', '❌ Недоступен', 'bad');
+        }
+        setText('router-ping', (data.router_ping_ms || 0).toFixed(1) + ' ms');
+        
+        // Форматируем uptime роутера
+        if (data.router_uptime_hours !== null && data.router_uptime_hours !== undefined) {
+          const hours = data.router_uptime_hours;
+          const days = Math.floor(hours / 24);
+          const remainingHours = Math.floor(hours % 24);
+          if (days > 0) {
+            setText('router-uptime', `${days}д ${remainingHours}ч`);
+          } else {
+            setText('router-uptime', `${remainingHours}ч`);
+          }
+        } else {
+          setText('router-uptime', '--');
+        }
+        
+        setText('router-load', (data.router_load1 || 0).toFixed(2));
+        setText('router-ram', (data.router_ram_percent || 0).toFixed(1) + '%');
+        
+        // Температура CPU роутера
+        if (data.router_cpu_temp !== null && data.router_cpu_temp !== undefined) {
+          const temp = data.router_cpu_temp;
+          let tempClass = 'ok';
+          if (temp > 70) tempClass = 'warn';
+          if (temp > 80) tempClass = 'bad';
+          setText('router-cpu-temp', temp.toFixed(1) + '°C', tempClass);
+        } else {
+          setText('router-cpu-temp', '--');
+        }
+        
+        // Метрики трафика WAN
+        setText('wan-rx-month', (data.wan_rx_month || 0).toFixed(2) + ' GB');
+        setText('wan-tx-month', (data.wan_tx_month || 0).toFixed(2) + ' GB');
+        setText('wan-rx-total', (data.wan_rx_gb || 0).toFixed(2) + ' GB');
+        setText('wan-tx-total', (data.wan_tx_gb || 0).toFixed(2) + ' GB');
+        
+        // Speedtest
+        if (data.download_mbps !== null && data.download_mbps !== undefined) {
+          setText('speed-download', data.download_mbps.toFixed(1) + ' Mbps');
+        } else {
+          setText('speed-download', '--');
+        }
+        if (data.upload_mbps !== null && data.upload_mbps !== undefined) {
+          setText('speed-upload', data.upload_mbps.toFixed(1) + ' Mbps');
+        } else {
+          setText('speed-upload', '--');
+        }
+        if (data.ping_ms !== null && data.ping_ms !== undefined) {
+          setText('speed-ping', data.ping_ms.toFixed(1) + ' ms');
+        } else {
+          setText('speed-ping', '--');
+        }
+        
+        // Время обновления
+        if (data.updated_at) {
+          const date = new Date(data.updated_at);
+          setText('updated', date.toLocaleString('ru-RU'));
+        }
+        
+        // Обновляем статусы сервисов
+        updateServiceStatus('ha-status', data.homeassistant_up);
+        
+      } catch (error) {
+        console.error('Ошибка загрузки метрик:', error);
+        setText('ha-up', '⚠️ Ошибка загрузки', 'warn');
+      }
+    }
+
+    // Проверка статуса сервисов через fetch
+    async function checkServiceStatus(id, url) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-cache',
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        // no-cors всегда возвращает opaque response, но если нет ошибки - сервис работает
+        updateServiceStatus(id, 1);
+      } catch (error) {
+        console.log(`Service ${id} check failed:`, error.message);
+        updateServiceStatus(id, 0);
+      }
+    }
+
+    function updateServiceStatus(id, isUp) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (isUp === 1 || isUp === true) {
+        el.textContent = '✅ Работает';
+        el.className = 'service-status status-ok';
+      } else {
+        el.textContent = '❌ Недоступен';
+        el.className = 'service-status status-error';
+      }
+    }
+
+    // Запускаем загрузку
+    loadMetrics();
+    setInterval(loadMetrics, 30000);
+    
+    // Проверяем сервисы
+    checkServiceStatus('nextcloud-status', 'https://nextcloud.udobnidom.ru');
+    checkServiceStatus('immich-status', 'https://immich.udobnidom.ru');
+    checkServiceStatus('iknow-status', 'https://iknow.udobnidom.ru');
+  </script>
+</body>
+</html>
+
