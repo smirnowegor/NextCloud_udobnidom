@@ -1,0 +1,20 @@
+[Unit]
+Description=Nextcloud Whiteboard WebSocket Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/whiteboard-server
+Environment=NODE_ENV=production
+Environment=HOST=0.0.0.0
+Environment=PORT=3002
+Environment=NEXTCLOUD_URL=http://127.0.0.1
+Environment=JWT_SECRET_KEY=vwTF8G4LH3gWk0r5ofcCxMXhltndDVpmBQq9iNIRE6JAySez
+ExecStart=/usr/bin/node websocket_server/main.js
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

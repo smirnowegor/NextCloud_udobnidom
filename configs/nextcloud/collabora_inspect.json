@@ -1,0 +1,228 @@
+[
+    {
+        "Id": "f25cad5dabad1fdb2985dc70f3164c14e44b86f887050552fa538d8af1bebfce",
+        "Created": "2026-04-06T10:00:03.712316991Z",
+        "Path": "/start-collabora-online.sh",
+        "Args": [],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 11905,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-04-06T10:00:04.37318037Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:c9cebf26beb57b4e1bcef98823a19a8d861ee2756ff27bed9976bf1c62338695",
+        "ResolvConfPath": "/var/lib/docker/containers/f25cad5dabad1fdb2985dc70f3164c14e44b86f887050552fa538d8af1bebfce/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/f25cad5dabad1fdb2985dc70f3164c14e44b86f887050552fa538d8af1bebfce/hostname",
+        "HostsPath": "/var/lib/docker/containers/f25cad5dabad1fdb2985dc70f3164c14e44b86f887050552fa538d8af1bebfce/hosts",
+        "LogPath": "/var/lib/docker/containers/f25cad5dabad1fdb2985dc70f3164c14e44b86f887050552fa538d8af1bebfce/f25cad5dabad1fdb2985dc70f3164c14e44b86f887050552fa538d8af1bebfce-json.log",
+        "Name": "/collabora-code",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "bridge",
+            "PortBindings": {
+                "9980/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "9980"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/3e3b194d1193f0501bbfecae949699047fa1076964e323c2e496ca90f585d077-init/diff:/var/lib/docker/overlay2/4d12a2d3ea8f637ad01855ce4ba7a3db93ad6a0094b26a20c9fc96e85aef5083/diff:/var/lib/docker/overlay2/24fcb42104e3b8619178a9d848cfd3b7ec8c66fa616c0f0c6b5b1405cfc867a5/diff:/var/lib/docker/overlay2/6cdd2a5901c20339e24ed6b2ece9ef8e77f5082e99a8d874bfe529f17b30d9d3/diff:/var/lib/docker/overlay2/be9a16fc8ba06144e0ef213093e0e5fb7b82a21c67bd62233fbcce8e933eb48e/diff",
+                "MergedDir": "/var/lib/docker/overlay2/3e3b194d1193f0501bbfecae949699047fa1076964e323c2e496ca90f585d077/merged",
+                "UpperDir": "/var/lib/docker/overlay2/3e3b194d1193f0501bbfecae949699047fa1076964e323c2e496ca90f585d077/diff",
+                "WorkDir": "/var/lib/docker/overlay2/3e3b194d1193f0501bbfecae949699047fa1076964e323c2e496ca90f585d077/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [],
+        "Config": {
+            "Hostname": "f25cad5dabad",
+            "Domainname": "",
+            "User": "1001",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "9980/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "domain=nextcloud.udobnidom.ru",
+                "server_name=collabora.udobnidom.ru",
+                "extra_params=--o:ssl.enable=false --o:ssl.termination=true",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LC_CTYPE=C.UTF-8"
+            ],
+            "Cmd": null,
+            "Image": "collabora/code",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/start-collabora-online.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "author": "Collabora Productivity Ltd.",
+                "commit.history.core": "https://git.libreoffice.org/core/+log/cp-25.04.9-4",
+                "commit.history.online": "https://github.com/CollaboraOnline/online/commits/cp-25.04.9-4",
+                "description": "Collabora Online is a powerful collaborative Office suite that supports all major document, spreadsheet and presentation file formats, which you can integrate into your own infrastructure. Collabora Online provides data security and sovereignty, and is ideally suited to the demands of a modern distributed working environment. Delivering a familiar look and feel, Collabora Online represents a real alternative to other big-brands solutions, giving you control and flexibility.",
+                "release.notes": "https://www.collaboraonline.com/code-25-04-release-notes/",
+                "version": "25.04.9.4"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "88ee4425e722df90751643742f71128b290319d9bed7e2c29785fc11c464c3b1",
+            "SandboxKey": "/var/run/docker/netns/88ee4425e722",
+            "Ports": {
+                "9980/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "9980"
+                    },
+                    {
+                        "HostIp": "::",
+                        "HostPort": "9980"
+                    }
+                ]
+            },
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "9e7b9a37b54a82ecbfc2a32e749a8de72b6b10bfae951f745747180cbce262fa",
+            "Gateway": "172.17.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "172.17.0.2",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "02:42:ac:11:00:02",
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "02:42:ac:11:00:02",
+                    "NetworkID": "5d3d0c031d73ec0955cd104a1fc81d7d9dba0730356928619b8494346dc7373d",
+                    "EndpointID": "9e7b9a37b54a82ecbfc2a32e749a8de72b6b10bfae951f745747180cbce262fa",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DriverOpts": null,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

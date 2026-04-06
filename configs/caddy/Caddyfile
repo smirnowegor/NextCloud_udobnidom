@@ -1,0 +1,118 @@
+{
+    email admin@udobnidom.ru
+    log {
+        output file /var/log/caddy/access.log
+    }
+
+    servers {
+        timeouts {
+            read_body 10s
+            read_header 5s
+            write 30s
+            idle 120s
+        }
+    }
+}
+
+(common_proxy) {
+    header_up X-Real-IP {remote_host}
+    header_up X-Forwarded-Proto https
+    flush_interval -1
+}
+
+(cloudflare_proxy) {
+    header_up X-Real-IP {header.CF-Connecting-IP}
+    flush_interval -1
+}
+
+(security_headers) {
+    header {
+        X-Frame-Options SAMEORIGIN
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+}
+
+(local_only) {
+    @blocked not remote_ip 192.168.2.0/24 127.0.0.1
+    abort @blocked
+}
+
+udobnidom.ru {
+    import security_headers
+
+    handle /grafana/* {
+        import local_only
+        reverse_proxy localhost:3000 {
+            import cloudflare_proxy
+        }
+    }
+
+    handle_path /prometheus/* {
+        import local_only
+        reverse_proxy localhost:9090 {
+            import cloudflare_proxy
+        }
+    }
+
+    root * /var/www/landing
+    file_server
+}
+
+www.udobnidom.ru {
+    redir https://udobnidom.ru{uri} permanent
+}
+
+ha.udobnidom.ru {
+    import security_headers
+    reverse_proxy 192.168.2.158:8123 {
+        import common_proxy
+    }
+    encode zstd gzip
+}
+
+immich.udobnidom.ru {
+    import security_headers
+    reverse_proxy 192.168.2.131:2283 {
+        import common_proxy
+    }
+    encode zstd gzip
+}
+
+iknow.udobnidom.ru {
+    import security_headers
+    reverse_proxy 192.168.2.232:3000 {
+        import common_proxy
+    }
+    encode zstd gzip
+}
+
+baserow.udobnidom.ru {
+    reverse_proxy 192.168.2.236:80
+}
+
+collabora.udobnidom.ru {
+    import security_headers
+    reverse_proxy http://192.168.2.145:9980 {
+        import cloudflare_proxy
+    }
+    encode zstd gzip
+}
+
+nextcloud.udobnidom.ru {
+    import security_headers
+
+    handle_path /standalone-signaling/* {
+        reverse_proxy http://192.168.2.145:8080
+    }
+
+    handle_path /whiteboard/* {
+        reverse_proxy http://192.168.2.145:3002
+    }
+
+    reverse_proxy http://192.168.2.145:80 {
+        import common_proxy
+    }
+    encode zstd gzip
+}

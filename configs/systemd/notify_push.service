@@ -1,0 +1,15 @@
+[Unit]
+Description=Nextcloud notify_push
+After=network.target mariadb.service redis.service
+
+[Service]
+User=www-data
+Group=www-data
+ExecStart=/var/www/nextcloud/apps/notify_push/bin/x86_64/notify_push /var/www/nextcloud/config/config.php
+Restart=always
+RestartSec=3
+Environment=PORT=7867
+Environment=NEXTCLOUD_URL=http://127.0.0.1
+
+[Install]
+WantedBy=multi-user.target
