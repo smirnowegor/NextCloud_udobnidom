@@ -99,6 +99,28 @@ sudo -u www-data php occ config:app:set richdocuments disable_certificate_verifi
 
 # 7. Systemd Services (HPB)
 
+# Nextcloud Talk Signaling (Spreed)
+if [ ! -f "/usr/bin/nextcloud-spreed-signaling" ]; then
+    apt install -y nextcloud-spreed-signaling
+fi
+
+cat > /etc/nextcloud-spreed-signaling/server.conf <<EOF
+[http]
+listen = 127.0.0.1:8080
+[app]
+debug = false
+[sessions]
+hashkey = $(openssl rand -hex 32)
+blockkey = $(openssl rand -hex 32)
+[backend]
+backends = backend-1
+[backend-1]
+url = http://127.0.0.1
+secret = $(openssl rand -hex 32)
+EOF
+
+systemctl enable --now nextcloud-spreed-signaling
+
 # Notify Push
 cat > /etc/systemd/system/notify_push.service <<EOF
 [Unit]
@@ -143,6 +165,11 @@ EOF
 
 systemctl daemon-reload
 systemctl enable --now notify_push whiteboard
+
+# 8. Final Nextcloud App Config for HPB
+cd /var/www/nextcloud
+sudo -u www-data php occ config:app:set spreed signaling_servers --value='[{"url":"https://'"$NC_DOMAIN"'/standalone-signaling/","hideInternalServer":true}]'
+sudo -u www-data php occ config:app:set whiteboard server_url --value="https://$NC_DOMAIN/whiteboard/"
 
 echo "=== Done! Nextcloud is ready at https://$NC_DOMAIN ==="
 echo "Admin User: $ADMIN_USER"

@@ -70,10 +70,32 @@ sudo -u www-data php occ config:system:set trusted_proxies 0 --value="192.168.2.
 sudo -u www-data php occ config:system:set overwriteprotocol --value="https"
 ```
 
-## 6. Вспомогательные сервисы (Systemd)
-В файлах `/etc/systemd/system/notify_push.service` и `whiteboard.service` использовать:
-`Environment=NEXTCLOUD_URL=http://127.0.0.1`
-(Внутреннее общение без SSL).
+## 6. High-Performance Backend (HPB)
+
+Для максимальной производительности Talk (Spreed), уведомлений и доски (Whiteboard) используются следующие компоненты:
+
+### Nextcloud Talk Signaling
+*   **Сервис:** `nextcloud-spreed-signaling`
+*   **Порт:** `8080` (HTTP)
+*   **Caddy:** Проксирует `/standalone-signaling/` -> `http://192.168.2.145:8080`
+
+### Notify Push (Client Push)
+*   **Сервис:** `notify_push.service`
+*   **Порт:** `7867` (HTTP)
+*   **Caddy:** Обрабатывается через Nginx (`location /push`) или напрямую.
+
+### Whiteboard
+*   **Сервис:** `whiteboard.service`
+*   **Порт:** `3002` (HTTP)
+*   **Caddy:** Проксирует `/whiteboard/` -> `http://192.168.2.145:3002`
+
+## 7. Установка с нуля (Автоматизация)
+В репозитории подготовлен скрипт `install.sh`, который:
+1.  Устанавливает все зависимости (PHP 8.4, MariaDB 11.8, Redis 8, Nginx).
+2.  Настраивает базу данных и Nextcloud.
+3.  Разворачивает Collabora в Docker.
+4.  Устанавливает и настраивает все HPB сервисы (Signaling, Whiteboard, Push).
+5.  Применяет патч для приложения Passwords (отключение HIBP таймаутов).
 
 ---
-*Документация сформирована на основе успешного дебага 06.04.2026.*
+*Документация обновлена 06.04.2026. Конфигурация проверена и является стабильной.*
